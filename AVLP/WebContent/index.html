@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Adaptive Vender List Processor</title>
+<!-- Use Bootstrap -->
+<link rel="stylesheet" href="include/bootstrap.min.css">
+<!--
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Needed for date picker - SY -->
+<!-- Use Bootstrap -->
+<link rel="stylesheet" href="include/jquery-ui.css">
+<!--
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+-->
+<!-- Local style - SY -->
+<link href="include/avlp_styles.css" rel="stylesheet">
+<!-- The following includes work when they are in header or in body - SY -->
+<!-- To use SSL on bluemix, files normally referenced using CDN need to be installed locally on server -->
+<script src="include/jquery-3.1.1.min.js"></script>
+<script src="include/jquery.validate.min.js"></script>
+<script src="include/additional-methods.min.js"></script>
+<script src="include/jquery-ui.js"></script>
+<!--
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4"></script>
+-->
+<!--
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/additional-methods.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4"></script>
+-->
+<script src="include/avlp.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="header">
+			<h1 class="custom">Adaptive Vendor List Processor (AVLP)</h1>
+			<h4 class="custom">---- based on Excel list processing template by Mary Ann Connerley</h4>
+		</div>
+		<p>&nbsp;</p>
+		<form id="user_input" novalidate="novalidate" action="/AVLP/rest/files/upload" method="POST" 
+		enctype="multipart/form-data" autocomplete="on">
+			<table>
+				<tr>
+					<td><h4>Vendor Profile:</h4></td>
+
+					<td>&nbsp;&nbsp;<select name="profile" id="profile">
+							<option selected>HVM_Common_Profile</option>
+					</select></td>
+				</tr>
+				<tr>
+					<td><h4>Interest Area:</h4></td>
+					<td>&nbsp;&nbsp;<select name="interest_area" id=interest_area>
+							<option value="EC_B2B_Interest">B2B</option>
+							<option value="EC_B2C_Interest">B2C</option>
+							<option value="CA_Interest" selected>CA</option>
+					</select></td>
+				</tr>
+				<tr>
+					<td><h4>Event/Action:</h4></td>
+
+					<td>&nbsp;&nbsp;<select name="behavior" id="behavior">
+							<option selected>Resource_Download</option>
+							<option>MISC_HVE</option>
+							<option>online_event_3rdParty_reg</option>
+							<option>online_event_3rdParty_att</option>
+							<option>online_event_3rdParty_att_hve</option>
+							<option>online_event_commerce_reg</option>
+							<option>online_event_commerce_att</option>
+							<option>LIVE_EVENT_COMMERCE_REG</option>
+							<option>LIVE_EVENT_COMMERCE_ATT</option>
+							<option>LIVE_EVENT_3RDPARTY_ATT</option>
+							<option>LIVE_EVENT_VISIT_BOOTH</option>
+							<option>LIVE_EVENT_VISIT_BOOTH_HVE</option>
+							<option>LIVE_EVENT_QUALCON</option>
+							<option>MISC</option>
+					</select></td>
+				</tr>
+				<tr>
+					<td><h4>Response Code:</h4></td>
+					<td>&nbsp;&nbsp;<input type="text" name="resp_code" id="resp_code" size="55"/></td>
+					<!--
+				<td>
+					(e.g., 000004TL-CA045_4TL_COS_MADI_WW_2h4016_000)
+				</td>
+				  -->
+				</tr>
+				<tr>
+					<td><h4>Submitter Name:</h4></td>
+					<td>&nbsp;&nbsp;<input type="text" name="submit_name" id="submit_name" size="20"/></td>
+					<!--
+					data-validation="length alphanumeric" data-validation-length="min1"/></td>
+					-->
+				</tr>
+				<tr>
+					<td><h4>Submit Date:</h4></td>
+					<td>&nbsp;&nbsp;<input type="text" name="submit_date" id="submit_date" size="10"/>
+					</td>
+				</tr>
+				<tr>
+					<td><h4>Vendor File:</h4></td>
+					<td>&nbsp;&nbsp;<input type="file" name="file" id="file" size="60" accept="text/plain"/></td>
+				</tr>
+				<tr>
+					<td><br></td>
+				</tr>
+				<tr>
+					<td><br></td>
+				<td>
+					<h4>
+						<input type="submit" name = "validate" value="Validate Input File" style="font-size:12pt;color:dark_grey;background-color:light_grey;border:2px solid light_blue;padding:3px"/>
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="submit" name = "generate" value="Generate Output File - for list upload" style="font-size:12pt;color:dark_grey;background-color:light_grey;border:2px solid light_blue;padding:3px"/>
+					</h4>
+					<!--
+					<h4>
+						<input type="submit" name = "validate" value="Validate My Input" style="font-size:15pt;color:white;background-color:green;border:2px solid #336600;padding:3px"/>
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="submit" name = "generate" value="Generate List for Upload" style="font-size:15pt;color:white;background-color:green;border:2px solid #336600;padding:3px"/>
+					</h4>
+					 -->
+				</td>
+				</tr>
+			</table>
+        <div class="err" id="resp_msg"></div>
+		</form>
+		<p>
+		</p>
+		<p>
+			Note: vendor file must be a tab-delimited .txt file. Download a test sample:
+			<a href="test_file/AVLP_Test_Input_small.txt" download="avlp_test_input_small.txt"> &nbsp;&nbsp;&nbsp;&nbsp;Small</a>
+			<a href="test_file/AVLP_Test_Input_large.txt" download="avlp_test_input_large.txt"> &nbsp;&nbsp;&nbsp;&nbsp;Large</a>
+		</p>
+		<br>
+		<br>
+		<div class="footer">HVM Data Procession - 2016</div>
+	</div>
+</body>
+</html>
